@@ -1,0 +1,348 @@
+/* ---- Reset & Base ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f0f2f5;
+  color: #172b4d;
+  min-height: 100vh;
+}
+
+/* ---- App Header ---- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #0052cc;
+  color: #fff;
+  padding: 12px 24px;
+  position: relative;
+  min-height: 54px;
+}
+
+.app-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Login View ---- */
+#login-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.login-box {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  padding: 40px 48px;
+  width: 360px;
+  text-align: center;
+}
+
+.login-box h1 {
+  font-size: 1.5rem;
+  color: #0052cc;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  color: #6b778c;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#login-form input[type="password"] {
+  padding: 10px 14px;
+  border: 2px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#login-form input[type="password"]:focus {
+  border-color: #0052cc;
+}
+
+#login-form button[type="submit"] {
+  padding: 10px;
+  background: #0052cc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#login-form button[type="submit"]:hover {
+  background: #0747a6;
+}
+
+.login-error {
+  color: #de350b;
+  font-size: 0.875rem;
+}
+
+/* ---- Header Buttons ---- */
+.btn-new {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-new:hover { background: rgba(255,255,255,0.2); }
+
+.btn-logout {
+  position: absolute;
+  right: 24px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.6);
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-logout:hover { background: rgba(255,255,255,0.15); }
+
+.btn-back {
+  position: absolute;
+  left: 24px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.6);
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-back:hover { background: rgba(255,255,255,0.15); }
+
+.btn-delete {
+  position: absolute;
+  right: 24px;
+  background: #de350b;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-delete:hover { background: #bf2600; }
+
+/* ---- Board ---- */
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  align-items: flex-start;
+  min-height: calc(100vh - 54px);
+}
+
+/* ---- Lane ---- */
+.lane {
+  flex: 1;
+  background: #ebecf0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  max-height: calc(100vh - 102px);
+}
+
+.lane-header {
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #5e6c84;
+  border-bottom: 2px solid #dfe1e6;
+}
+
+.lane-cards {
+  padding: 8px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 60px;
+  transition: background 0.15s;
+}
+
+.lane-cards.drag-over {
+  background: #c1d4f0;
+  border-radius: 0 0 8px 8px;
+}
+
+/* ---- Card ---- */
+.card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.15s, opacity 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.card:active { cursor: grabbing; }
+.card.dragging { opacity: 0.4; }
+
+.card-title {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #0052cc;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card-title:hover { text-decoration: underline; }
+
+/* ---- Detail View ---- */
+.detail-main {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b778c;
+}
+
+#detail-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  padding: 6px 8px;
+  color: #172b4d;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+#detail-title:hover, #detail-title:focus {
+  border-color: #0052cc;
+  background: #fff;
+}
+
+#detail-status {
+  padding: 8px 12px;
+  border: 2px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #172b4d;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  width: 200px;
+  transition: border-color 0.15s;
+}
+
+#detail-status:focus { border-color: #0052cc; }
+
+/* ---- Rich Text Editor ---- */
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  background: #f4f5f7;
+  border: 2px solid #dfe1e6;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: #42526e;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.toolbar-btn:hover {
+  background: #dfe1e6;
+  border-color: #c1c7d0;
+}
+
+.toolbar-btn.active {
+  background: #deebff;
+  border-color: #0052cc;
+  color: #0052cc;
+}
+
+.editor-content {
+  min-height: 180px;
+  padding: 12px 14px;
+  border: 2px solid #dfe1e6;
+  border-radius: 0 0 4px 4px;
+  background: #fff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.editor-content:focus { border-color: #0052cc; }
+
+.editor-content[placeholder]:empty::before {
+  content: attr(placeholder);
+  color: #a5adba;
+  pointer-events: none;
+}
+
+.editor-content ul { padding-left: 20px; }

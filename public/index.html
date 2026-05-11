@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Organizer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <div id="login-view">
+    <div class="login-box">
+      <h1>Project Organizer</h1>
+      <p class="login-subtitle">Enter your password to continue</p>
+      <form id="login-form">
+        <input
+          id="password-input"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        />
+        <button type="submit">Unlock</button>
+        <p id="login-error" class="login-error" hidden>Incorrect password. Please try again.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view" hidden>
+    <header class="app-header">
+      <span class="app-title">Project Organizer</span>
+      <button id="new-item-btn" class="btn-new" title="Create new item">+</button>
+      <button id="logout-btn" class="btn-logout" title="Log out">Log out</button>
+    </header>
+    <main class="board">
+      <section class="lane" data-status="todo">
+        <div class="lane-header">To do</div>
+        <div class="lane-cards" data-status="todo"></div>
+      </section>
+      <section class="lane" data-status="in_progress">
+        <div class="lane-header">In progress</div>
+        <div class="lane-cards" data-status="in_progress"></div>
+      </section>
+      <section class="lane" data-status="done">
+        <div class="lane-header">Done</div>
+        <div class="lane-cards" data-status="done"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detail-view" hidden>
+    <header class="app-header">
+      <button id="back-btn" class="btn-back">&#8592; Back</button>
+      <span class="app-title">Work Item</span>
+      <button id="delete-btn" class="btn-delete">Delete</button>
+    </header>
+    <main class="detail-main">
+      <div class="detail-field">
+        <label for="detail-title">Title</label>
+        <input id="detail-title" type="text" placeholder="Enter title..." />
+      </div>
+      <div class="detail-field">
+        <label for="detail-status">Status</label>
+        <select id="detail-status">
+          <option value="todo">To do</option>
+          <option value="in_progress">In progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+      <div class="detail-field">
+        <label>Description</label>
+        <div class="editor-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+          <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Bullet list">&#8226; List</button>
+        </div>
+        <div id="detail-description" class="editor-content" contenteditable="true" placeholder="Add a description..."></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

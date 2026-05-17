@@ -35,19 +35,88 @@ const loginForm = document.getElementById('login-form');
 const passwordInput = document.getElementById('password-input');
 const loginError = document.getElementById('login-error');
 
+// ---- DB selector ----
+const dbDefaultRadio = document.getElementById('db-default');
+const dbCustomRadio = document.getElementById('db-custom');
+const dbCustomRow = document.getElementById('db-custom-row');
+const dbPathInput = document.getElementById('db-path-input');
+const dbBrowseBtn = document.getElementById('db-browse-btn');
+const dbFileInput = document.getElementById('db-file-input');
+
+const LS_DB_PATH_KEY = 'projectOrganizer.lastDbPath';
+
+function restoreDbSelection() {
+  const saved = localStorage.getItem(LS_DB_PATH_KEY);
+  if (saved && saved !== '__default__') {
+    dbCustomRadio.checked = true;
+    dbCustomRow.hidden = false;
+    dbPathInput.value = saved;
+  } else {
+    dbDefaultRadio.checked = true;
+    dbCustomRow.hidden = true;
+    dbPathInput.value = '';
+  }
+}
+
+dbDefaultRadio.addEventListener('change', () => {
+  dbCustomRow.hidden = true;
+});
+
+dbCustomRadio.addEventListener('change', () => {
+  dbCustomRow.hidden = false;
+  dbPathInput.focus();
+});
+
+dbBrowseBtn.addEventListener('click', () => {
+  dbFileInput.click();
+});
+
+// File picker fills the path input with the selected filename.
+// Users can also type/paste the full path manually.
+dbFileInput.addEventListener('change', () => {
+  const file = dbFileInput.files[0];
+  if (file) {
+    dbPathInput.value = file.name;
+  }
+});
+
+restoreDbSelection();
+
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.hidden = true;
+
+  const useCustom = dbCustomRadio.checked;
+  let dbPathToSend = null;
+
+  if (useCustom) {
+    const typed = dbPathInput.value.trim();
+    if (!typed) {
+      loginError.textContent = 'Please enter or select a .db file path.';
+      loginError.hidden = false;
+      return;
+    }
+    dbPathToSend = typed;
+  }
+
+  const body = { password: passwordInput.value };
+  if (dbPathToSend) body.dbPath = dbPathToSend;
+
   const result = await fetch('/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: passwordInput.value }),
+    body: JSON.stringify(body),
   });
   if (result.ok) {
+    localStorage.setItem(LS_DB_PATH_KEY, dbPathToSend || '__default__');
     passwordInput.value = '';
     appReady = true;
     await loadDashboard();
   } else {
+    const data = await result.json().catch(() => ({}));
+    loginError.textContent = data.error === 'Incorrect password'
+      ? 'Incorrect password. Please try again.'
+      : (data.error || 'Login failed.');
     loginError.hidden = false;
     passwordInput.value = '';
     passwordInput.focus();
@@ -57,6 +126,8 @@ loginForm.addEventListener('submit', async (e) => {
 // ---- Logout ----
 document.getElementById('logout-btn').addEventListener('click', async () => {
   await api('POST', '/api/logout');
+  loginError.hidden = true;
+  restoreDbSelection();
   showView(loginView);
   passwordInput.focus();
 });

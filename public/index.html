@@ -21,6 +21,28 @@
           autocomplete="current-password"
           required
         />
+        <div class="db-selector">
+          <label class="db-radio-label">
+            <input type="radio" name="db-choice" value="default" id="db-default" checked />
+            Default database
+          </label>
+          <label class="db-radio-label">
+            <input type="radio" name="db-choice" value="custom" id="db-custom" />
+            Select database
+          </label>
+          <div id="db-custom-row" class="db-custom-row" hidden>
+            <input
+              type="text"
+              id="db-path-input"
+              class="db-path-input"
+              placeholder="C:\path\to\database.db"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button type="button" id="db-browse-btn" class="btn-browse">Browse&hellip;</button>
+            <input type="file" id="db-file-input" accept=".db" style="display:none" />
+          </div>
+        </div>
         <button type="submit">Unlock</button>
         <p id="login-error" class="login-error" hidden>Incorrect password. Please try again.</p>
       </form>

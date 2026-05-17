@@ -2,17 +2,29 @@ const initSqlJs = require('sql.js');
 const fs = require('fs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, 'data.db');
+const DEFAULT_DB_PATH = path.join(__dirname, 'data.db');
 
+let dbPath = DEFAULT_DB_PATH;
 let db;
+
+function setDbPath(newPath) {
+  if (newPath && newPath !== dbPath) {
+    dbPath = newPath;
+    db = null; // force re-init on next getDb()
+  }
+}
+
+function getDbPath() {
+  return dbPath;
+}
 
 async function getDb() {
   if (db) return db;
 
   const SQL = await initSqlJs();
 
-  if (fs.existsSync(DB_PATH)) {
-    const fileBuffer = fs.readFileSync(DB_PATH);
+  if (fs.existsSync(dbPath)) {
+    const fileBuffer = fs.readFileSync(dbPath);
     db = new SQL.Database(fileBuffer);
   } else {
     db = new SQL.Database();
@@ -35,7 +47,7 @@ async function getDb() {
 function persist() {
   if (!db) return;
   const data = db.export();
-  fs.writeFileSync(DB_PATH, Buffer.from(data));
+  fs.writeFileSync(dbPath, Buffer.from(data));
 }
 
-module.exports = { getDb, persist };
+module.exports = { getDb, persist, setDbPath, getDbPath, DEFAULT_DB_PATH };

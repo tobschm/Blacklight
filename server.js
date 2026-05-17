@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { getDb, persist } = require('./db');
+const { getDb, persist, setDbPath, getDbPath, DEFAULT_DB_PATH } = require('./db');
 
 // --- Config loader ---
 function loadConfig(filePath) {
@@ -56,11 +56,26 @@ function requireAuth(req, res, next) {
 }
 
 // --- Auth routes ---
+app.get('/api/db-default-path', (req, res) => {
+  res.json({ path: DEFAULT_DB_PATH });
+});
+
 app.post('/api/login', (req, res) => {
-  const { password } = req.body;
+  const { password, dbPath: requestedDbPath } = req.body;
   if (!password || password !== PASSWORD) {
     return res.status(401).json({ error: 'Incorrect password' });
   }
+
+  if (requestedDbPath) {
+    const resolved = path.resolve(requestedDbPath);
+    if (!resolved.endsWith('.db')) {
+      return res.status(400).json({ error: 'Database path must end with .db' });
+    }
+    setDbPath(resolved);
+  } else {
+    setDbPath(DEFAULT_DB_PATH);
+  }
+
   const token = signToken('authenticated');
   res.cookie('auth', token, {
     httpOnly: true,

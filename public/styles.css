@@ -4,8 +4,8 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f0f2f5;
-  color: #172b4d;
+  background: #000000;
+  color: #c4c4c4;
   min-height: 100vh;
 }
 
@@ -15,7 +15,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #0052cc;
+  background: #c56b05;
   color: #fff;
   padding: 12px 24px;
   position: relative;
@@ -23,6 +23,8 @@ body {
 }
 
 .app-title {
+  position: absolute;
+  left: 24px;
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -48,12 +50,12 @@ body {
 
 .login-box h1 {
   font-size: 1.5rem;
-  color: #0052cc;
+  color: #000000;
   margin-bottom: 8px;
 }
 
 .login-subtitle {
-  color: #6b778c;
+  color: #c4c4c4;
   font-size: 0.9rem;
   margin-bottom: 24px;
 }
@@ -66,7 +68,7 @@ body {
 
 #login-form input[type="password"] {
   padding: 10px 14px;
-  border: 2px solid #dfe1e6;
+  border: 2px solid #c4c4c4;
   border-radius: 4px;
   font-size: 1rem;
   outline: none;
@@ -74,12 +76,12 @@ body {
 }
 
 #login-form input[type="password"]:focus {
-  border-color: #0052cc;
+  border-color: #c4c4c4;
 }
 
 #login-form button[type="submit"] {
   padding: 10px;
-  background: #0052cc;
+  background: #c4c4c4;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -103,9 +105,9 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 36px;
+  width: 66px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 18px;
   border: 2px solid #fff;
   background: transparent;
   color: #fff;
@@ -178,7 +180,8 @@ body {
 /* ---- Lane ---- */
 .lane {
   flex: 1;
-  background: #ebecf0;
+  background: #000000;
+  border: 2px solid #dfe1e6;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -192,7 +195,7 @@ body {
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #5e6c84;
+  color: #c4c4c4;
   border-bottom: 2px solid #dfe1e6;
 }
 
@@ -211,11 +214,12 @@ body {
 
 /* ---- Card ---- */
 .card {
-  background: #fff;
+  background: #000000;
   border-radius: 4px;
+  border: 2px solid #dfe1e6;
   padding: 10px 14px;
   margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(185, 84, 1, 0.1);
   cursor: grab;
   user-select: none;
   transition: box-shadow 0.15s, opacity 0.15s;
@@ -229,7 +233,7 @@ body {
 .card-title {
   flex: 1;
   font-size: 0.95rem;
-  color: #0052cc;
+  color: #c56b05;
   cursor: pointer;
   text-decoration: none;
 }

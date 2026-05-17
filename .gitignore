@@ -1,3 +1,4 @@
 node_modules/
 data.db
 .claude/settings.local.json
+start_po.bat

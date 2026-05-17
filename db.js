@@ -40,6 +40,13 @@ async function getDb() {
     )
   `);
 
+  // Migration: add category column if missing (existing databases)
+  const cols = db.exec("PRAGMA table_info(work_items)");
+  const colNames = cols.length ? cols[0].values.map(r => r[1]) : [];
+  if (!colNames.includes('category')) {
+    db.run("ALTER TABLE work_items ADD COLUMN category TEXT NOT NULL DEFAULT 'None'");
+  }
+
   persist();
   return db;
 }

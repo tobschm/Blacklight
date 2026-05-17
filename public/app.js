@@ -1,6 +1,34 @@
 // ---- State ----
 let currentItem = null;
 let saveDebounceTimer = null;
+let availableCategories = []; // populated from /api/config, never includes 'None'
+
+// ---- Category helpers ----
+// First 5 named slots; 'None' is always white
+const CATEGORY_COLORS = ['#c0392b', '#f1c40f', '#2980b9', '#27ae60', '#8e44ad'];
+
+function categoryColor(category) {
+  if (!category || category === 'None') return '#ffffff';
+  const idx = availableCategories.indexOf(category);
+  if (idx === -1) return '#ffffff';
+  return CATEGORY_COLORS[idx] || '#ffffff';
+}
+
+function populateCategoryDropdown(selectedCategory) {
+  const select = document.getElementById('detail-category');
+  select.innerHTML = '';
+  const all = ['None', ...availableCategories];
+  all.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    select.appendChild(opt);
+  });
+  // If saved category is no longer available, fall back to 'None'
+  const validCategories = new Set(all);
+  select.value = validCategories.has(selectedCategory) ? selectedCategory : 'None';
+  updateCategorySelectStyle(select);
+}
 
 // ---- Views ----
 const loginView = document.getElementById('login-view');
@@ -143,6 +171,7 @@ async function loadDashboard() {
   ]);
   if (items === null) return;
   boardNameEl.textContent = (cfg && cfg.boardName) ? cfg.boardName : boardNameDefault;
+  availableCategories = (cfg && Array.isArray(cfg.categories)) ? cfg.categories : [];
   renderBoard(items);
   showView(dashboardView);
 }
@@ -163,6 +192,11 @@ function createCard(item) {
   card.draggable = true;
   card.dataset.id = item.id;
 
+  const validCategories = new Set(['None', ...availableCategories]);
+  const category = validCategories.has(item.category) ? item.category : 'None';
+  const color = categoryColor(category);
+  card.style.borderColor = color;
+
   const title = document.createElement('span');
   title.className = 'card-title';
   title.textContent = item.title;
@@ -172,6 +206,14 @@ function createCard(item) {
   });
 
   card.appendChild(title);
+
+  if (category !== 'None') {
+    const catLabel = document.createElement('span');
+    catLabel.className = 'card-category';
+    catLabel.textContent = category;
+    catLabel.style.color = color;
+    card.appendChild(catLabel);
+  }
 
   // Drag events
   card.addEventListener('dragstart', (e) => {
@@ -225,7 +267,13 @@ document.getElementById('new-item-btn').addEventListener('click', async () => {
 // ---- Detail view ----
 const detailTitle = document.getElementById('detail-title');
 const detailStatus = document.getElementById('detail-status');
+const detailCategory = document.getElementById('detail-category');
 const detailDescription = document.getElementById('detail-description');
+
+function updateCategorySelectStyle(select) {
+  const color = categoryColor(select.value);
+  select.style.borderLeftColor = color;
+}
 
 async function openDetail(id) {
   const item = await api('GET', `/api/items/${id}`);
@@ -236,6 +284,7 @@ function openDetailWithItem(item) {
   currentItem = item;
   detailTitle.value = item.title;
   detailStatus.value = item.status;
+  populateCategoryDropdown(item.category || 'None');
   detailDescription.innerHTML = item.description || '';
   showView(detailView);
 }
@@ -257,6 +306,14 @@ detailStatus.addEventListener('change', () => {
   if (!currentItem) return;
   currentItem.status = detailStatus.value;
   saveField({ status: detailStatus.value });
+});
+
+// Auto-save category on change (immediate)
+detailCategory.addEventListener('change', () => {
+  if (!currentItem) return;
+  currentItem.category = detailCategory.value;
+  updateCategorySelectStyle(detailCategory);
+  saveField({ category: detailCategory.value });
 });
 
 // Auto-save description (debounced)
@@ -286,6 +343,7 @@ async function flushSave() {
     title: detailTitle.value,
     description: detailDescription.innerHTML,
     status: detailStatus.value,
+    category: detailCategory.value,
   });
 }
 
@@ -327,15 +385,19 @@ detailDescription.addEventListener('mouseup', updateToolbarState);
 // ---- Bootstrap ----
 let appReady = false;
 (async () => {
-  const res = await fetch('/api/items');
+  const [itemsRes, cfgRes] = await Promise.all([
+    fetch('/api/items'),
+    fetch('/api/config'),
+  ]);
   if (appReady) return; // login completed while this was in flight
   appReady = true;
-  if (res.status === 401) {
+  if (itemsRes.status === 401) {
     showView(loginView);
     passwordInput.focus();
     return;
   }
-  const data = await res.json();
+  const [data, cfg] = await Promise.all([itemsRes.json(), cfgRes.json().catch(() => ({}))]);
+  availableCategories = (cfg && Array.isArray(cfg.categories)) ? cfg.categories : [];
   renderBoard(data);
   showView(dashboardView);
 })();

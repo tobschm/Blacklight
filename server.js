@@ -26,6 +26,12 @@ const PASSWORD = config['app.password'];
 const SESSION_SECRET = config['app.sessionSecret'];
 const VALID_STATUSES = ['todo', 'in_progress', 'done'];
 
+function getCategories() {
+  const raw = config['categories'];
+  if (!raw || !raw.trim()) return [];
+  return raw.split(',').map(c => c.trim()).filter(Boolean);
+}
+
 // --- Auth helpers ---
 function signToken(value) {
   const hmac = crypto.createHmac('sha256', SESSION_SECRET);
@@ -63,6 +69,7 @@ app.get('/api/db-default-path', (req, res) => {
 app.get('/api/config', requireAuth, (req, res) => {
   const result = {};
   if (config['board.name']) result.boardName = config['board.name'];
+  result.categories = getCategories();
   res.json(result);
 });
 
@@ -113,7 +120,7 @@ function dbAll(db, sql, params) {
   return values.map(row => Object.fromEntries(columns.map((col, i) => [col, row[i]])));
 }
 
-const ITEM_COLS = 'id, title, description, status, created_at';
+const ITEM_COLS = 'id, title, description, status, category, created_at';
 
 // --- Work item routes (all require auth) ---
 app.get('/api/items', requireAuth, async (req, res) => {
@@ -140,7 +147,7 @@ app.get('/api/items/:id', requireAuth, async (req, res) => {
 });
 
 app.put('/api/items/:id', requireAuth, async (req, res) => {
-  const { title, description, status } = req.body;
+  const { title, description, status, category } = req.body;
   if (status !== undefined && !VALID_STATUSES.includes(status)) {
     return res.status(400).json({ error: 'Invalid status' });
   }
@@ -151,10 +158,11 @@ app.put('/api/items/:id', requireAuth, async (req, res) => {
   const newTitle = title !== undefined ? title : existing.title;
   const newDesc = description !== undefined ? description : existing.description;
   const newStatus = status !== undefined ? status : existing.status;
+  const newCategory = category !== undefined ? category : existing.category;
 
   db.run(
-    'UPDATE work_items SET title = ?, description = ?, status = ? WHERE id = ?',
-    [newTitle, newDesc, newStatus, req.params.id]
+    'UPDATE work_items SET title = ?, description = ?, status = ?, category = ? WHERE id = ?',
+    [newTitle, newDesc, newStatus, newCategory, req.params.id]
   );
   persist();
 

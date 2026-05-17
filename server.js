@@ -60,6 +60,12 @@ app.get('/api/db-default-path', (req, res) => {
   res.json({ path: DEFAULT_DB_PATH });
 });
 
+app.get('/api/config', requireAuth, (req, res) => {
+  const result = {};
+  if (config['board.name']) result.boardName = config['board.name'];
+  res.json(result);
+});
+
 app.post('/api/login', (req, res) => {
   const { password, dbPath: requestedDbPath } = req.body;
   if (!password || password !== PASSWORD) {

@@ -133,9 +133,16 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 });
 
 // ---- Dashboard ----
+const boardNameEl = document.getElementById('board-name');
+const boardNameDefault = boardNameEl.textContent;
+
 async function loadDashboard() {
-  const items = await api('GET', '/api/items');
+  const [items, cfg] = await Promise.all([
+    api('GET', '/api/items'),
+    api('GET', '/api/config'),
+  ]);
   if (items === null) return;
+  boardNameEl.textContent = (cfg && cfg.boardName) ? cfg.boardName : boardNameDefault;
   renderBoard(items);
   showView(dashboardView);
 }

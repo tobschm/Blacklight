@@ -1,6 +1,15 @@
 /* ---- Reset & Base ---- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-[hidden] { display: none !important; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -36,13 +45,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f0f2f5;
+  background: #000000;
 }
 
 .login-box {
-  background: #fff;
+  background: #000000;
+  border: 2px solid #a5adba;
   border-radius: 8px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
   padding: 40px 48px;
   width: 360px;
   text-align: center;
@@ -50,7 +60,7 @@ body {
 
 .login-box h1 {
   font-size: 1.5rem;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
@@ -81,7 +91,7 @@ body {
 
 #login-form button[type="submit"] {
   padding: 10px;
-  background: #c4c4c4;
+  background: #c56b05;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -92,7 +102,8 @@ body {
 }
 
 #login-form button[type="submit"]:hover {
-  background: #0747a6;
+  background: #c96c01;
+  box-shadow: 0px 0px 25px rgb(197, 138, 11);
 }
 
 .login-error {
@@ -107,7 +118,7 @@ body {
   gap: 6px;
   text-align: left;
   padding: 10px 12px;
-  background: #f4f5f7;
+  background: #000000;
   border: 1px solid #dfe1e6;
   border-radius: 4px;
 }
@@ -117,7 +128,7 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
-  color: #333;
+  color: #fffafa;
   cursor: pointer;
 }
 
@@ -187,13 +198,15 @@ body {
   transition: background 0.15s;
 }
 
-.btn-new:hover { background: rgba(255,255,255,0.2); }
+.btn-new:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 
 .btn-logout {
   position: absolute;
   right: 24px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   color: #fff;
   border-radius: 4px;
   padding: 5px 12px;
@@ -202,22 +215,25 @@ body {
   transition: background 0.15s;
 }
 
-.btn-logout:hover { background: rgba(255,255,255,0.15); }
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
 
 .btn-back {
-  position: absolute;
-  left: 24px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   color: #fff;
   border-radius: 4px;
   padding: 5px 12px;
   font-size: 0.85rem;
   cursor: pointer;
   transition: background 0.15s;
+  flex-shrink: 0;
 }
 
-.btn-back:hover { background: rgba(255,255,255,0.15); }
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
 
 .btn-delete {
   position: absolute;
@@ -233,7 +249,9 @@ body {
   transition: background 0.15s;
 }
 
-.btn-delete:hover { background: #bf2600; }
+.btn-delete:hover {
+  background: #bf2600;
+}
 
 /* ---- Board ---- */
 .board {
@@ -294,18 +312,34 @@ body {
   align-items: center;
 }
 
-.card:active { cursor: grabbing; }
-.card.dragging { opacity: 0.4; }
+.card:active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.4;
+}
 
 .card-title {
   flex: 1;
-  font-size: 0.95rem;
-  color: #c56b05;
+  font-size: 1rem;
+  color: #c0894a;
   cursor: pointer;
   text-decoration: none;
 }
 
-.card-title:hover { text-decoration: underline; }
+.card-title:hover {
+  text-decoration: underline;
+}
+
+#detail-view .app-header {
+  justify-content: flex-start;
+}
+
+#detail-view .app-title {
+  position: static;
+  margin-left: 12px;
+}
 
 /* ---- Detail View ---- */
 .detail-main {
@@ -334,42 +368,50 @@ body {
 #detail-title {
   font-size: 1.4rem;
   font-weight: 600;
-  border: 2px solid transparent;
+  border: transparent;
+  border-left: 4px solid;
   border-radius: 4px;
   padding: 6px 8px;
-  color: #172b4d;
+  color: #fafafa;
   background: transparent;
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
 
-#detail-title:hover, #detail-title:focus {
-  border-color: #0052cc;
-  background: #fff;
+#detail-title:hover,
+#detail-title:focus {
+  border-color: #fafafa;
+  background: #202020;
+  box-shadow: 0px 0px 30px rgb(197, 138, 11);
 }
 
 #detail-status {
   padding: 8px 12px;
-  border: 2px solid #dfe1e6;
+  border: transparent;
+  border-left: 4px solid;
   border-radius: 4px;
   font-size: 0.95rem;
-  color: #172b4d;
-  background: #fff;
+  color: #fafafa;
+  background: #000000;
   outline: none;
   cursor: pointer;
   width: 200px;
   transition: border-color 0.15s;
 }
-
-#detail-status:focus { border-color: #0052cc; }
+#detail-status:hover,
+#detail-status:focus {
+  background: #202020;
+  box-shadow: 0px 0px 30px rgb(197, 138, 11);
+}
 
 /* ---- Rich Text Editor ---- */
 .editor-toolbar {
   display: flex;
   gap: 4px;
   padding: 6px 8px;
-  background: #f4f5f7;
-  border: 2px solid #dfe1e6;
+  background: #000000;
+  border: 2px solid #fafafa;
+  border-left: 4px solid;
   border-bottom: none;
   border-radius: 4px 4px 0 0;
 }
@@ -381,19 +423,18 @@ body {
   padding: 4px 10px;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #42526e;
+  color: #fafafa;
   transition: background 0.1s, border-color 0.1s;
 }
 
 .toolbar-btn:hover {
-  background: #dfe1e6;
-  border-color: #c1c7d0;
+  background: #c0894a;
+  box-shadow: 0px 0px 20px rgb(197, 138, 11);
 }
 
 .toolbar-btn.active {
-  background: #deebff;
-  border-color: #0052cc;
-  color: #0052cc;
+  background: #c0894a;
+  color: #000000;
 }
 
 .editor-content {
@@ -401,14 +442,16 @@ body {
   padding: 12px 14px;
   border: 2px solid #dfe1e6;
   border-radius: 0 0 4px 4px;
-  background: #fff;
+  background: #000000;
   font-size: 0.95rem;
   line-height: 1.6;
   outline: none;
   transition: border-color 0.15s;
 }
 
-.editor-content:focus { border-color: #0052cc; }
+.editor-content:focus {
+  border-color: #0052cc;
+}
 
 .editor-content[placeholder]:empty::before {
   content: attr(placeholder);
@@ -416,4 +459,6 @@ body {
   pointer-events: none;
 }
 
-.editor-content ul { padding-left: 20px; }
+.editor-content ul {
+  padding-left: 20px;
+}

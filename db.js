@@ -2,7 +2,9 @@ const initSqlJs = require('sql.js');
 const fs = require('fs');
 const path = require('path');
 
-const DEFAULT_DB_PATH = path.join(__dirname, 'data.db');
+const DEFAULT_DB_PATH = process.env.DATA_DIR
+  ? path.join(process.env.DATA_DIR, 'data.db')
+  : path.join(__dirname, 'data.db');
 
 let dbPath = DEFAULT_DB_PATH;
 let db;
@@ -39,6 +41,13 @@ async function getDb() {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
   `);
+
+  // Migration: add category column if missing (existing databases)
+  const cols = db.exec("PRAGMA table_info(work_items)");
+  const colNames = cols.length ? cols[0].values.map(r => r[1]) : [];
+  if (!colNames.includes('category')) {
+    db.run("ALTER TABLE work_items ADD COLUMN category TEXT NOT NULL DEFAULT 'None'");
+  }
 
   persist();
   return db;
